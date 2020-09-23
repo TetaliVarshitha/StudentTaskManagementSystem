@@ -35,6 +35,7 @@ import com.rest.dto.StudentProfile;
 import com.rest.dto.Submit;
 import com.rest.dto.Tasks;
 import com.rest.dto.Todo;
+import com.rest.dto.TrippleDes;
 import com.rest.dto.emailSending;
 import com.ts.dao.DoubtsDAO;
 import com.ts.dao.FacultyDAO;
@@ -54,6 +55,14 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void registerFaculty(Faculty faculty) {
 		System.out.println("Data Recieved in Register : " + faculty); 
+		try {
+			TrippleDes t = new TrippleDes();
+			String password = t.encrypt(faculty.getPassword());
+			faculty.setPassword(password);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    FacultyDAO facultyDao = new FacultyDAO();
 		facultyDao.register(faculty); 
 	}
@@ -84,6 +93,14 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void registerStudent(Student student) {
 		System.out.println("Data Recieved in Register : " + student); 
+		try {
+			TrippleDes t = new TrippleDes();
+			String password = t.encrypt(student.getPassword());
+			student.setPassword(password);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    StudentDAO studentDao = new StudentDAO();
 		studentDao.register(student); 
 	}
@@ -132,10 +149,27 @@ public class MyResource {
     	System.out.println(words[1]);
     	loginId = words[0];
     	password = words[1];
+    	try {
+			TrippleDes t = new TrippleDes();
+			String password1 = t.encrypt(password);
+			password = password1;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Faculty fac = new Faculty();
 		FacultyDAO facultyDao = new FacultyDAO();
 		//System.out.println(loginForm);
 		fac = facultyDao.login(loginId, password);
+		TrippleDes t1;
+		try {
+			t1 = new TrippleDes();
+			String password2 = t1.decrypt(fac.getPassword());
+			fac.setPassword(password2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(fac); 
 		
 		return fac;
@@ -384,8 +418,25 @@ public class MyResource {
     	password = words[1];
     	Student fac = new Student();
     	StudentDAO facultyDao = new StudentDAO();
+    	try {
+			TrippleDes t = new TrippleDes();
+			String password1 = t.encrypt(password);
+			password = password1;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//System.out.println(loginForm);
 		fac = facultyDao.login(loginId, password);
+		TrippleDes t1;
+		try {
+			t1 = new TrippleDes();
+			String password2 = t1.decrypt(fac.getPassword());
+			fac.setPassword(password2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(fac); 
 		return fac;
 	}
@@ -465,6 +516,14 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateFaculty(Faculty faculty) {
 		System.out.println("Received Data in update: " + faculty);
+		try {
+			TrippleDes t = new TrippleDes();
+			String password1 = t.encrypt(faculty.getPassword());
+			faculty.setPassword(password1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		FacultyDAO facDao = new FacultyDAO();
 		facDao.update(faculty);
@@ -477,7 +536,15 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateStudent(Student student) {
 		System.out.println("Received Data in update: " + student);
-		
+		String password = student.getPassword();
+		try {
+			TrippleDes t = new TrippleDes();
+			String password1 = t.encrypt(password);
+			student.setPassword(password1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		StudentDAO studentDao = new StudentDAO();
 		studentDao.update(student);
 		

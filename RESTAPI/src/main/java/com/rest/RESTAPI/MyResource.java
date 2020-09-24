@@ -299,6 +299,14 @@ public class MyResource {
 		Student faculty = facDao.getStudentByEmailId(emailId);
 		System.out.println(faculty); 
 		if(faculty!=null){
+			try {
+				TrippleDes t1 = new TrippleDes();
+				String password2 = t1.decrypt(faculty.getPassword());
+				faculty.setPassword(password2);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			emailSending studentDao = new emailSending();
 			studentDao.MailSending1(faculty);
 		}
@@ -371,7 +379,7 @@ public class MyResource {
 	public List <Tasks> getAllTask() {
 		
 		TasksDAO taskDao = new TasksDAO();
-		List<Tasks> taskList = taskDao.getAllTasks();
+		List<Tasks> taskList = taskDao.getAllTasks1();
 		return taskList;
 	}
 	

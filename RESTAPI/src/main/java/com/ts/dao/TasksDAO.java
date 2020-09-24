@@ -34,6 +34,12 @@ private static SessionFactory sessionFactory;
 		System.out.println("Inside All Tasks ..."+tasks);
 		return tasks;	
 	}
+	
+	public List<Tasks> getAllTasks1() {
+		List<Tasks> tasks=(List)HibernateTemplate.getObjectListByQuery("From Tasks");
+		System.out.println("Inside All Tasks ..."+tasks);
+		return tasks;	
+	}
 
 	public Tasks getTask(int taskId) {
 		return (Tasks)HibernateTemplate.getObject(Tasks.class,taskId);

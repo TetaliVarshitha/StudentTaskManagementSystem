@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.SQLQuery;
 
 import com.rest.dto.Review;
+import com.rest.dto.Submit;
 import com.rest.dto.Tasks;
 import com.ts.db.HibernateTemplate;
 
@@ -62,6 +63,21 @@ private static SessionFactory sessionFactory;
 			System.out.println(reviews.getReviewId());
 		}
 	}
+	
+	public Review getReview1(int taskId, int studentId) {
+		
+		String query= "from Review where taskId=:taskId and studentId=:studentId";
+		Query  query1 =  sessionFactory.openSession().createQuery(query);
+		 query1.setParameter("taskId",taskId);
+		 query1.setParameter("studentId",studentId);
+		 System.out.println(taskId);
+		 //Faculty obj = query1.list();
+		 Object queryResult = query1.uniqueResult();
+		 Review review = (Review)queryResult;
+		 return review;
+
+	}
+	
 	
 	
 }

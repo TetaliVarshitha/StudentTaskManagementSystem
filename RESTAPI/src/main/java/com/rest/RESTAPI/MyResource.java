@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -173,6 +174,56 @@ public class MyResource {
 		System.out.println(fac); 
 		
 		return fac;
+	}
+	
+	@Path("check/{details}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Submit check(@PathParam("details") String details) {
+		
+		System.out.println(details);
+		int taskId,studentId; 
+		String words[];
+    	words = details.split(" ");
+    	System.out.println(words[0]);
+    	System.out.println(words[1]);
+    	taskId = Integer.parseInt(words[0]);
+        studentId = Integer.parseInt(words[1]);
+        
+        SubmitDAO submit = new SubmitDAO();
+        Submit sum = submit.getSubmission(taskId,studentId);
+        String str;
+        if(sum==null) {
+        	str = "Not Submitted";
+        } else {
+        	ReviewDAO rev = new ReviewDAO();
+        	Review review = rev.getReview1(taskId,studentId);
+        	if(review==null) {
+        		str = "Submitted, Not Reviewed";
+        	} else {
+        		str = "Submitted, "+review.getReview();
+        	}
+        }
+        //JSON.parse(str);
+        return sum;
+	}
+	
+	@Path("check1/{details}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Review check1(@PathParam("details") String details) {
+		
+		System.out.println(details);
+		int taskId,studentId; 
+		String words[];
+    	words = details.split(" ");
+    	System.out.println(words[0]);
+    	System.out.println(words[1]);
+    	taskId = Integer.parseInt(words[0]);
+        studentId = Integer.parseInt(words[1]);
+        	ReviewDAO rev = new ReviewDAO();
+        	Review review = rev.getReview1(taskId,studentId);
+        return review;
 	}
 	
 	@Path("getAllFaculty")
@@ -388,6 +439,13 @@ public class MyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List <Tasks> getAllTasks() {
 		Date today = new Date();
+		Calendar cal = Calendar.getInstance();  
+        cal.setTime(today);  
+        cal.set(Calendar.HOUR_OF_DAY, 0);  
+        cal.set(Calendar.MINUTE, 0);  
+        cal.set(Calendar.SECOND, 0);  
+        cal.set(Calendar.MILLISECOND, 0);  
+        
 		Date date;
 		ArrayList<Tasks> arrlist = new ArrayList<Tasks>(); 
 		TasksDAO taskDao = new TasksDAO();
@@ -396,9 +454,12 @@ public class MyResource {
 			 String deadline = task.getSubmitDate();
 			 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 try {
+				 String str = format.format(today);
+				 today = format.parse(str);
 			    date = format.parse(deadline);
 			    int x = today.compareTo(date);
 			    System.out.println(x);
+			    System.out.println(today);
 			    if(today.compareTo(date) < 0 || today.equals(date)) {
 			    	arrlist.add(task);
 			         System.out.println("Date 1 occurs after Date 2");

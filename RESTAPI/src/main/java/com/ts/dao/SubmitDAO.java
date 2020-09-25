@@ -45,5 +45,20 @@ public class SubmitDAO {
 		}
 		return submit;	*/
 	}
+	
+	public Submit getSubmission(int taskId, int studentId) {
+		
+		String query= "from Submit where taskId=:taskId and studentId=:studentId";
+		Query  query1 =  sessionFactory.openSession().createQuery(query);
+		 query1.setParameter("taskId",taskId);
+		 query1.setParameter("studentId",studentId);
+		 System.out.println(taskId);
+		 //Faculty obj = query1.list();
+		 Object queryResult = query1.uniqueResult();
+		 Submit submit = (Submit)queryResult;
+		 return submit;
+
+	}
+	
 
 }
